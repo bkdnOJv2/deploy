@@ -6,3 +6,7 @@
 	path = bkdnojv2/repo_fe
 	url = https://github.com/bkdnOJv2/bkdnOJ-reborn-frontend.git
 	branch = main-2.0
+[submodule "bkdnojv2/repo_tags_pred"]
+	path = bkdnojv2/repo_tags_pred
+	url = https://github.com/bkdnOJv2/tag-prediction.git
+	branch = release/0.0.1
