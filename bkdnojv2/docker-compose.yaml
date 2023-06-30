@@ -3,7 +3,8 @@ services:
     db:
         container_name: bkdnojv2_db
         image: postgres
-        restart: always
+        # restart: always
+        restart: unless-stopped
         volumes:
             - ./db/:/var/lib/postgresql/data
         env_file: [env/postgres.env]
@@ -11,7 +12,8 @@ services:
     redis:
         container_name: bkdnojv2_redis
         image: redis:alpine
-        restart: always
+        # restart: always
+        restart: unless-stopped
         networks: [api]
     base:
         build:
@@ -29,10 +31,12 @@ services:
         restart: unless-stopped
         volumes:
             - ./media/:/app/media/
-            - ./repo/:/app/
+            - ./repo/app/:/app/
         working_dir: /app/
-        env_file: [env/postgres.env]
+        env_file: [env/postgres.env, env/api.env]
         networks: [api, web, db]
+        ports:
+            - 8000:8000
         depends_on: [base, db, redis]
     celery:
         container_name: bkdnojv2_celery
@@ -43,9 +47,9 @@ services:
         init: true
         restart: unless-stopped
         volumes:
-            - ./repo/:/app/
+            - ./repo/app/:/app/
         working_dir: /app/
-        env_file: [env/postgres.env]
+        env_file: [env/postgres.env, env/api.env]
         networks: [api, db]
         depends_on: [base, db, redis]
     bridged:
@@ -58,17 +62,24 @@ services:
         restart: unless-stopped
         volumes:
             - ./problems/:/problems/
-            - ./repo/:/app/
+            - ./repo/app/:/app/
         working_dir: /app/
-        env_file: [env/postgres.env]
+        env_file: [env/postgres.env, env/api.env]
         networks: [api, web, db]
         ports:
             - 9999:9999
         depends_on: [base, db, redis]
     web:
         container_name: bkdnojv2_web
+        build:
+            context: .
+            dockerfile: ./docker_web/Dockerfile
         image: nvat/bkdnoj-v2_web
+        restart: unless-stopped
+        env_file: [env/web.env]
         networks: [web]
+        ports:
+            - 3000:80
         depends_on: [api]
 networks:
     db:

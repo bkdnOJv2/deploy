@@ -2,3 +2,7 @@
 	path = bkdnojv2/repo
 	url = https://github.com/bkdnOJv2/bkdnOJ-reborn-backend
 	branch = main-2.0
+[submodule "bkdnojv2/repo_fe"]
+	path = bkdnojv2/repo_fe
+	url = https://github.com/bkdnOJv2/bkdnOJ-reborn-frontend.git
+	branch = main-2.0
