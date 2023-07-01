@@ -66,25 +66,35 @@ services:
             - ./repo/app/:/app/
         working_dir: /app/
         env_file: [env/postgres.env, env/api.env]
-        networks: [api, web, db]
+        networks: [api, db]
         ports:
             - 9999:9999
         depends_on: [base, db, redis]
+    # localjudge:
+    #     container_name: bkdnojv2_local_judge
+    #     image: dmoj/judge-base-large
+    #     restart: unless-stopped
+    #     volumes:
+    #         - ./media/problem_data:/problems:ro
+    #         - ./etc:/judgeconf:ro
+    #     command: dmoj -c /judgeconf/localjudge.yaml -p 9999 127.0.0.1
+    #     network_mode: 'host'
+    #     depends_on: [bridged]
     web:
         container_name: bkdnojv2_web
         build:
             context: .
             dockerfile: ./docker_web/Dockerfile
             args:
-                - REACT_APP_BACKEND_URL=http://localhost
-                - REACT_APP_BACKEND_PORT=3080
+                - API_DOMAIN=http://localhost
+                - API_PORT=8000
         image: nvat/bkdnoj-v2_web
         restart: unless-stopped
         env_file: [env/web.env]
         networks: [web]
         ports:
             - 3000:80
-        depends_on: [api]
+        depends_on: []
     tags_prediction:
         container_name: bkdnojv2_tags_prediction
         build:
