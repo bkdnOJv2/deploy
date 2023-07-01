@@ -95,12 +95,12 @@ services:
         ports:
             - 3000:80
         depends_on: []
-    tags_prediction:
-        container_name: bkdnojv2_tags_prediction
+    tags_pred:
+        container_name: bkdnojv2_tags_pred
         build:
             context: .
             dockerfile: ./docker_tags_pred/Dockerfile
-        image: nvat/bkdnoj-v2_tags-prediction
+        image: nvat/bkdnoj-v2_tags-pred
         restart: unless-stopped
         networks: [api]
         ports:
